@@ -23,7 +23,7 @@
                         :source-paths ["src/cljs"]
                         :figwheel     {:devcards       true
                                        :websocket-host :js-client-host}
-                        :compiler     {:main                 "yakker.core"
+                        :compiler     {:main                 "yakker.client"
                                        :asset-path           "js/out"
                                        :output-to            "resources/public/js/yakker.js"
                                        :output-dir           "resources/public/js/out"

@@ -1,4 +1,4 @@
-(ns yakker.core
+(ns yakker.client
   (:require-macros [devcards.core :refer [defcard defcard-rg]])
   (:require [cognitect.transit :as t]
             [reagent.core :as reagent :refer [atom]]))
