@@ -54,4 +54,4 @@
              (undertow/http-handler)
              (undertow/graceful-shutdown 10000)))
 
-(defn -main [] (run app {:port 3000}))
+(defn -main [& args] (run app {:port 3000}))
