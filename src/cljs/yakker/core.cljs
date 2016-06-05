@@ -35,8 +35,6 @@
   (swap! messages #(vec (take 10 (conj % message)))))
 
 ;;; UI
-(defonce messages (atom []))
-
 (defn message-list []
   [:ul (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li message])])
 
