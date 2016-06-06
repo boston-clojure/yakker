@@ -4,3 +4,4 @@
 target/
 js/
 *~
+*-init.clj
