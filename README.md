@@ -5,14 +5,10 @@
 
 ### Usage:
 
-Start the server:
-```
-lein run
-```
+Start the server and client:
 
-Start the client:
 ```
-lein figwheel
+lein pdo run, figwheel
 ```
 
 Point your browser at [http://localhost:3449/](http://localhost:3449/).

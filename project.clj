@@ -10,23 +10,26 @@
   :repositories [["jitpack" "https://jitpack.io"]]
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-figwheel "0.5.3-2"]]
+  :jvm-opts ["-Djava.awt.headless=true"]
   :main ^:skip-aot yakker.core
   :target-path "target/%s"
   :profiles {:dev     {:dependencies [[com.cemerick/piggieback "0.2.1"]
                                       [devcards "0.2.1-7"]
                                       [figwheel-sidecar "0.5.3-2"]]
+                       :plugins      [[lein-pdo "0.1.1"]]
                        :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]
                                       :init             (do (use 'figwheel-sidecar.repl-api)
                                                             (start-figwheel!))}}
              :uberjar {:aot :all}}
   :source-paths ["src/clj" "src/cljc" "src/cljs"]
-  :clean-targets ^{:protect false} ["resources/public/js/" "target"]
+  :clean-targets ^{:protect false} [:target-path "resources/public/js/compiled/"]
   :cljsbuild {:builds [{:id           "dev"
-                        :source-paths ["src/cljs"]
+                        :source-paths ["src/cljs" "dev/cljs"]
                         :figwheel     {:devcards       true
                                        :websocket-host :js-client-host}
-                        :compiler     {:main                 "yakker.client"
-                                       :asset-path           "js/out"
-                                       :output-to            "resources/public/js/yakker.js"
-                                       :output-dir           "resources/public/js/out"
-                                       :source-map-timestamp true}}]})
+                        :compiler     {:main                 "yakker.client-devcards"
+                                       :asset-path           "js/compiled/out"
+                                       :output-to            "resources/public/js/compiled/yakker.js"
+                                       :output-dir           "resources/public/js/compiled/out"
+                                       :source-map-timestamp true}}]}
+  :aliases {"go" ["pdo" "run," "figwheel"]})
