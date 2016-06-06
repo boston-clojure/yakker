@@ -7,7 +7,6 @@
 
 ;;; Transit over Websockets
 (defonce ws-chan (reagent/atom nil))
-(defonce messages (reagent/atom []))
 
 (def ^:private json-reader (t/reader :json))
 (def ^:private json-writer (t/writer :json))
@@ -28,6 +27,3 @@
         (reset! ws-chan chan)
         (println "Websocket connection established with: " url))
     (throw (js/Error. "Websocket connection failed!"))))
-
-(defn update-messages! [{:keys [message]}]
-  (swap! messages #(vec (take 10 (conj % message)))))

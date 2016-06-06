@@ -1,9 +1,14 @@
 (ns yakker.client-devcards
   (:require-macros [devcards.core :refer [defcard defcard-rg]])
-  (:require [yakker.client :refer [send-transit-msg! make-websocket! messages update-messages!]]
+  (:require [yakker.client :refer [send-transit-msg! make-websocket!]]
             [reagent.core :as reagent]))
 
 ;;; UI
+(defonce messages (reagent/atom []))
+
+(defn update-messages! [{:keys [message]}]
+  (swap! messages #(vec (take 10 (conj % message)))))
+
 (defn message-list []
   [:ul (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li message])])
 
