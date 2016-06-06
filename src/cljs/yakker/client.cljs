@@ -1,12 +1,11 @@
 (ns yakker.client
-  (:require [cognitect.transit :as t]
-            [reagent.core :as reagent]))
+  (:require [cognitect.transit :as t]))
 
 ;;; Lifted from:
 ;;; https://yogthos.net/posts/2015-06-11-Websockets.html
 
 ;;; Transit over Websockets
-(defonce ws-chan (reagent/atom nil))
+(defonce ws-chan (atom nil))
 
 (def ^:private json-reader (t/reader :json))
 (def ^:private json-writer (t/writer :json))
