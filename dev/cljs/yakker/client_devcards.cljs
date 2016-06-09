@@ -8,10 +8,10 @@
 (defonce ws-conn (atom))
 
 (defn update-messages! [{:keys [message]}]
-  (swap! messages #(take 10 (conj % message))))
+  (swap! messages #(take-last 10 (conj % message))))
 
 (defn message-list []
-  [:ul (reverse (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li message]))])
+  [:ul (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li message])])
 
 (defn message-input []
   (let [value (reagent/atom nil)]
