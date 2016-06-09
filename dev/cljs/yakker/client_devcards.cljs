@@ -4,7 +4,7 @@
             [reagent.core :as reagent]))
 
 ;;; UI
-(defonce messages (reagent/atom (list)))
+(defonce messages (reagent/atom []))
 (defonce ws-conn (atom))
 
 (defn update-messages! [{:keys [message]}]
