@@ -4,13 +4,14 @@
             [reagent.core :as reagent]))
 
 ;;; UI
-(defonce messages (reagent/atom []))
+(defonce messages (reagent/atom (list)))
+(defonce ws-conn (atom))
 
 (defn update-messages! [{:keys [message]}]
-  (swap! messages #(vec (take 10 (conj % message)))))
+  (swap! messages #(take 10 (conj % message))))
 
 (defn message-list []
-  [:ul (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li message])])
+  [:ul (reverse (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li message]))])
 
 (defn message-input []
   (let [value (reagent/atom nil)]
@@ -29,6 +30,8 @@
 
 ;;; Main
 (defn init! []
-  (make-websocket! (str "ws://localhost:3000/ws") update-messages!))
+  (when @ws-conn
+    (.close @ws-conn))
+  (reset! ws-conn (make-websocket! (str "ws://bosclj.xngns.net:3000/ws") update-messages!)))
 
 (init!)

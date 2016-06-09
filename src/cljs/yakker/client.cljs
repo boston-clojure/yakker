@@ -24,5 +24,6 @@
   (if-let [chan (js/WebSocket. url)]
     (do (set! (.-onmessage chan) (receive-transit-msg! receive-handler))
         (reset! ws-chan chan)
-        (println "Websocket connection established with: " url))
+        (println "Websocket connection established with: " url)
+        chan)
     (throw (js/Error. "Websocket connection failed!"))))
