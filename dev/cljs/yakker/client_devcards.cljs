@@ -28,6 +28,8 @@
 
 (defcard-rg Input [message-input])
 
+(defcard-rg TinkerSome [:div "A simple dev card.  Almost boring."])
+
 ;;; Main
 (defn init! []
   (when @ws-conn
