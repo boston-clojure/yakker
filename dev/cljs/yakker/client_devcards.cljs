@@ -7,7 +7,7 @@
 (defonce messages (reagent/atom []))
 
 (defn update-messages! [{:keys [message]}]
-  (swap! messages #(vec (take 10 (conj % message)))))
+  (swap! messages #(vec (take-last 10 (conj % message)))))
 
 (defn message-list []
   [:ul (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li message])])
