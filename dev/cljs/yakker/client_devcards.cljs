@@ -8,7 +8,7 @@
 (defonce ws-conn (atom))
 
 (defn update-messages! [{:keys [message]}]
-  (swap! messages #(take-last 10 (conj % message))))
+  (swap! messages #(vec (take-last 10 (conj % message)))))
 
 (defn message-list []
   [:ul (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li message])])
@@ -22,14 +22,14 @@
                              :on-change   #(reset! vv (-> % .-target .-value))
                              }  ]
        "  Message"
-      [:input.form-control {:type        :text
-                            :placeholder "type in a message and press enter"
-                            :value       @value
-                            :on-change   #(reset! value (-> % .-target .-value))
-                            :on-key-down #(when (= (.-keyCode %) 13)
-                                            (send-transit-msg! {:message
-                                                                (str @vv ": " @value)})
-                                            (reset! value nil))}]]
+       [:input.form-control {:type        :text
+                             :placeholder "type in a message and press enter"
+                             :value       @value
+                             :on-change   #(reset! value (-> % .-target .-value))
+                             :on-key-down #(when (= (.-keyCode %) 13)
+                                             (send-transit-msg! {:message
+                                                                 (str @vv ": " @value)})
+                                             (reset! value nil))}]]
       )))
 
 (defcard-rg Messages [message-list])
@@ -40,6 +40,6 @@
 (defn init! []
   (when @ws-conn
     (.close @ws-conn))
-  ;(reset! ws-conn (make-websocket! (str "ws://localhost:3000/ws") update-messages!)))
+                                        ;(reset! ws-conn (make-websocket! (str "ws://localhost:3000/ws") update-messages!)))
   (reset! ws-conn (make-websocket! (str "ws://bosclj.xngns.net:3000/ws") update-messages!)))
 (init!)
