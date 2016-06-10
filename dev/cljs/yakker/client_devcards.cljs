@@ -40,6 +40,6 @@
 (defn init! []
   (when @ws-conn
     (.close @ws-conn))
-  (reset! ws-conn (make-websocket! (str "ws://localhost:3000/ws") update-messages!)))
-  ;(reset! ws-conn (make-websocket! (str "ws://bosclj.xngns.net:3000/ws") update-messages!)))
+  ;(reset! ws-conn (make-websocket! (str "ws://localhost:3000/ws") update-messages!)))
+  (reset! ws-conn (make-websocket! (str "ws://bosclj.xngns.net:3000/ws") update-messages!)))
 (init!)
