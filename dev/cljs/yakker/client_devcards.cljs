@@ -17,10 +17,20 @@
   (let [value (reagent/atom nil)
         vv (reagent/atom nil)]
     (fn []
-      [:div "Name"
+      [:div "Name "
        [:input.form-control {:type :text
                              :on-change   #(reset! vv (-> % .-target .-value))
                              }  ]
+       "  Message "
+      [:input.form-control {:type        :text
+                            :size 100
+                            :placeholder "type in a message and press enter"
+                            :value       @value
+                            :on-change   #(reset! value (-> % .-target .-value))
+                            :on-key-down #(when (= (.-keyCode %) 13)
+                                            (send-transit-msg! {:message
+                                                                (str @vv ": " @value)})
+                                            (reset! value nil))}]]
        "  Message"
        [:input.form-control {:type        :text
                              :placeholder "type in a message and press enter"
@@ -40,6 +50,6 @@
 (defn init! []
   (when @ws-conn
     (.close @ws-conn))
-                                        ;(reset! ws-conn (make-websocket! (str "ws://localhost:3000/ws") update-messages!)))
+  ;(reset! ws-conn (make-websocket! (str "ws://localhost:3000/ws") update-messages!)))
   (reset! ws-conn (make-websocket! (str "ws://bosclj.xngns.net:3000/ws") update-messages!)))
 (init!)
