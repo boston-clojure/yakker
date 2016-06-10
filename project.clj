@@ -6,6 +6,7 @@
                  [com.cognitect/transit-cljs "0.8.237"]
                  [org.immutant/web "2.1.4"]
                  [reagent "0.6.0-alpha2"]
+                 [markdown-clj "0.9.89"]
                  [com.github.Sepia-Officinalis/clj-bitauth "0.1.2"]]
   :repositories [["jitpack" "https://jitpack.io"]]
   :plugins [[lein-cljsbuild "1.1.3"]
