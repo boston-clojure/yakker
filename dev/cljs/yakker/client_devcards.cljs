@@ -22,15 +22,15 @@
                           \" "&quot;"
                           \' "&#39;"}))
 
-(defn decorate-msg
-  "Parses for markdown syntax. Returns map html-formatted string"
-  [msg]
-  (mark-unsafe (md->html (escape-html msg))))
-
 (defn mark-unsafe
   "Marks a string as safe for reagent. Takes string, returns map"
   [msg]
   {:dangerouslySetInnerHTML (js-obj "__html" msg)})
+
+(defn decorate-msg
+  "Parses for markdown syntax. Returns map html-formatted string"
+  [msg]
+  (mark-unsafe (md->html (escape-html msg))))
 
 (defn message-list []
   [:ul (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li (decorate-msg message)])])
@@ -61,8 +61,7 @@
 
 ;;; Main
 (defn init! []
-  (when @ws-conn
-    (.close @ws-conn))
-    ;(reset! ws-conn (make-websocket! (str "ws://localhost:3000/ws") update-messages!)))
-    (reset! ws-conn (make-websocket! (str "ws://bosclj.xngns.net:3000/ws") update-messages!)))
+  (when @ws-conn (.close @ws-conn))
+  (reset! ws-conn (make-websocket! (str "ws://bosclj.xngns.net:3000/ws") update-messages!)))
+
 (init!)
