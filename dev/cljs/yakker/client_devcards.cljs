@@ -7,8 +7,12 @@
 (defonce messages (reagent/atom []))
 (defonce ws-conn (atom))
 
-(defn update-messages! [{:keys [message]}]
-  (swap! messages #(vec (take-last 10 (conj % message)))))
+(defn format-date [value]
+  (str "(" (.toLocaleTimeString (js/Date. (if value value (js/Date.now)))) ") "))
+
+(defn update-messages! [{:keys [message timestamp]}]
+  (swap! messages #(vec (take-last 10 (conj % (str (when timestamp (format-date timestamp))
+                                                   message))))))
 
 (defn message-list []
   [:ul (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li message])])
@@ -28,7 +32,8 @@
                              :on-change   #(reset! value (-> % .-target .-value))
                              :on-key-down #(when (= (.-keyCode %) 13)
                                              (send-transit-msg! {:message
-                                                                 (str @vv ": " @value)})
+                                                                 (str @vv ": " @value)
+                                                                 :timestamp (js/Date.now)})
                                              (reset! value nil))}]]
       )))
 
@@ -40,6 +45,5 @@
 (defn init! []
   (when @ws-conn
     (.close @ws-conn))
-                                        ;(reset! ws-conn (make-websocket! (str "ws://localhost:3000/ws") update-messages!)))
   (reset! ws-conn (make-websocket! (str "ws://bosclj.xngns.net:3000/ws") update-messages!)))
 (init!)
