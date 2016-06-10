@@ -8,26 +8,29 @@
 (defonce messages (reagent/atom []))
 (defonce ws-conn (atom))
 
+(defn format-date [value]
+  (str "(" (.toLocaleTimeString (js/Date. (if value value (js/Date.now)))) ") "))
+
+(defn update-messages! [{:keys [message timestamp]}]
+  (swap! messages #(vec (take-last 10 (conj % (str (when timestamp (format-date timestamp))
+                                                   message))))))
 (defn escape-html [text]
   (clojure.string/escape text
-                              {\& "&amp;"
-                               \< "&lt;"
-                               \> "&gt;"
-                               \" "&quot;"
-                               \' "&#39;"}))
+                         {\& "&amp;"
+                          \< "&lt;"
+                          \> "&gt;"
+                          \" "&quot;"
+                          \' "&#39;"}))
 
 (defn decorate-msg
   "Parses for markdown syntax. Returns map html-formatted string"
   [msg]
-    (mark-unsafe (md->html (escape-html msg))))
+  (mark-unsafe (md->html (escape-html msg))))
 
 (defn mark-unsafe
   "Marks a string as safe for reagent. Takes string, returns map"
   [msg]
   {:dangerouslySetInnerHTML (js-obj "__html" msg)})
-
-(defn update-messages! [{:keys [message]}]
-  (swap! messages #(vec (take-last 10 (conj % message)))))
 
 (defn message-list []
   [:ul (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li (decorate-msg message)])])
@@ -57,7 +60,8 @@
                              :on-change   #(reset! value (-> % .-target .-value))
                              :on-key-down #(when (= (.-keyCode %) 13)
                                              (send-transit-msg! {:message
-                                                                 (str @vv ": " @value)})
+                                                                 (str @vv ": " @value)
+                                                                 :timestamp (js/Date.now)})
                                              (reset! value nil))}]]
       )))
 
