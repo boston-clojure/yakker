@@ -46,15 +46,14 @@
        "  Message"
        [:input.form-control {:type        :text
                              :size 100
-                             :placeholder "type in a message and press enter"
+                             :placeholder "your chatter goes here"
                              :value       @value
                              :on-change   #(reset! value (-> % .-target .-value))
                              :on-key-down #(when (= (.-keyCode %) 13)
                                              (send-transit-msg! {:message
                                                                  (str @vv ": " @value)
                                                                  :timestamp (js/Date.now)})
-                                             (reset! value nil))}]]
-      )))
+                                             (reset! value nil))}]])))
 
 (defcard-rg Messages [message-list])
 
