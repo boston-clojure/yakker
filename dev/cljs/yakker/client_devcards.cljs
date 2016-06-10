@@ -63,10 +63,5 @@
 (defn init! []
   (when @ws-conn
     (.close @ws-conn))
-  <<<<<<< HEAD
-  =======
-
-                                        ;(reset! ws-conn (make-websocket! (str "ws://localhost:3000/ws") update-messages!)))
-  >>>>>>> a4aff4c7093e5c1441c4800e3950f405fc2022c1
   (reset! ws-conn (make-websocket! (str "ws://bosclj.xngns.net:3000/ws") update-messages!)))
 (init!)
