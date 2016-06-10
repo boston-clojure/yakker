@@ -1,17 +1,36 @@
 (ns yakker.client-devcards
   (:require-macros [devcards.core :refer [defcard defcard-rg]])
   (:require [yakker.client :refer [send-transit-msg! make-websocket!]]
+            [markdown.core :refer [md->html]]
             [reagent.core :as reagent]))
 
 ;;; UI
 (defonce messages (reagent/atom []))
 (defonce ws-conn (atom))
 
+(defn escape-html [text]
+  (clojure.string/escape text
+                              {\& "&amp;"
+                               \< "&lt;"
+                               \> "&gt;"
+                               \" "&quot;"
+                               \' "&#39;"}))
+
+(defn decorate-msg
+  "Parses for markdown syntax. Returns map html-formatted string"
+  [msg]
+    (mark-unsafe (md->html (escape-html msg))))
+
+(defn mark-unsafe
+  "Marks a string as safe for reagent. Takes string, returns map"
+  [msg]
+  {:dangerouslySetInnerHTML (js-obj "__html" msg)})
+
 (defn update-messages! [{:keys [message]}]
   (swap! messages #(vec (take-last 10 (conj % message)))))
 
 (defn message-list []
-  [:ul (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li message])])
+  [:ul (for [[i message] (map-indexed vector @messages)] ^{:key i} [:li (decorate-msg message)])])
 
 (defn message-input []
   (let [value (reagent/atom nil)
@@ -40,6 +59,7 @@
 (defn init! []
   (when @ws-conn
     (.close @ws-conn))
-                                        ;(reset! ws-conn (make-websocket! (str "ws://localhost:3000/ws") update-messages!)))
+
+  ;(reset! ws-conn (make-websocket! (str "ws://localhost:3000/ws") update-messages!)))
   (reset! ws-conn (make-websocket! (str "ws://bosclj.xngns.net:3000/ws") update-messages!)))
 (init!)
