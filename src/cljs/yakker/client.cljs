@@ -14,9 +14,14 @@
   (fn [msg]
     (update-fn (->> msg .-data (t/read json-reader)))))
 
+(defn decorate [m s]
+  (update-in m [:message] #(str %2 ": " %1) s))
+
+(def myid (int (rand 10000)))
+
 (defn send-transit-msg! [msg]
   (if @ws-chan
-    (.send @ws-chan (t/write json-writer msg))
+    (.send @ws-chan (t/write json-writer (decorate msg myid)))
     (throw (js/Error. "Websocket is not available!"))))
 
 (defn make-websocket! [url receive-handler]
