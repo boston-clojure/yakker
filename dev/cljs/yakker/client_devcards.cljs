@@ -17,12 +17,13 @@
   (let [value (reagent/atom nil)
         vv (reagent/atom nil)]
     (fn []
-      [:div "Name"
+      [:div "Name "
        [:input.form-control {:type :text
                              :on-change   #(reset! vv (-> % .-target .-value))
                              }  ]
-       "  Message"
+       "  Message "
       [:input.form-control {:type        :text
+                            :size 100
                             :placeholder "type in a message and press enter"
                             :value       @value
                             :on-change   #(reset! value (-> % .-target .-value))
